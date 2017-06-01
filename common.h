@@ -17,9 +17,6 @@
 #define np(i, j, k, l)	*npnt[(i) + (j) * Nd + (k) * Nd * Nd + (l) * Nd * Nd * Nl]
 #define mp(i, j, k, l)	*mpnt[(i) + (j) * Nd + (k) * Nd * Nd + (l) * Nd * Nd * Nl]
 
-//#define np(i, j, k, l)	ng(mov(dx[i] + dx[j], k), mov(dy[i] + dy[j], l))
-//#define mp(i, j, k, l)	mg(mov(dx[i] + dy[i], k), mov(dy[i] + dy[j], l))
-
 #define hx(i, j)		hisx[(i) + (j) * Np]
 #define hy(i, j)		hisy[(i) + (j) * Np]
 
@@ -43,10 +40,5 @@ extern double *ht;
 
 extern int *ngrd, **npnt;
 extern int *mgrd, **mpnt;
-
-extern int *nb;
-
-/// TPS scheme
-double ShootingTPS(double B, double X);
 
 #endif

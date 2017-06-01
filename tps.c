@@ -8,20 +8,18 @@
 #define ty(i, j)	tmpy[(i) + (j)*Np]
 
 static void SaveConfig(int ia);
-static void LoadConfig(int M);
-static void AcceptTraj();
-static void RejectTraj();
-static void QuenchBias(double *x, double X);
-static double CalcTime();
-static double CalcTimeDelta();
+static void LoadConfig(int Ma);
+static void AcceptTraj(int Ma);
 
-static int *tmpx, *tmpy, Ma;
+static double CalcTime();
+static double CalcTimeDelta(int Ma);
+
+static int *tmpx, *tmpy;
 static double *tt;
-static double x = 0;
 
 double ShootingTPS(double B, double X)
 {
-	Ma = XorInteger() % (Na - 1) + 1;
+	int Ma = XorInteger() % (Na - 1) + 1;
 
 	tmpx = (int *)malloc(sizeof(int) * Np * Ma);
 	tmpy = (int *)malloc(sizeof(int) * Np * Ma);
@@ -38,46 +36,31 @@ double ShootingTPS(double B, double X)
 		SaveConfig(ia);
 	}
 
-	double dt = CalcTimeDelta();
+	double dt = CalcTimeDelta(Ma);
 
 	double r = XorDouble();
-	double p = exp(-x * dt);
+	double p = exp(-X * dt);
 
 	if(r < p)
 	{
 		AcceptTraj(Ma);
-		QuenchBias(&x, X);
 	}
 
 	else
 	{
-		RejectTraj();
+		LoadConfig(0);
 	}
 
 	free(tmpx);
 	free(tmpy);
 	free(tt);
 
-	CalcBond();
 	double t = CalcTime();
 
 	return t;
 }
 
-static void QuenchBias(double *x, double X)
-{
-	if((X > 0.0) && (X > *x))
-	{
-		*x += X / 100;
-	}
-
-	if((X < 0.0) && (X < *x))
-	{
-		*x += X / 100;
-	}
-}
-
-static void AcceptTraj()
+static void AcceptTraj(int Ma)
 {
 	for(int ia = 0; ia < Ma; ia ++)
 	{
@@ -89,12 +72,6 @@ static void AcceptTraj()
 
 		ht[ia + Na - Ma] = tt[ia];
 	}
-}
-
-static void RejectTraj()
-{
-	LoadConfig(0);
-	CalcBond();
 }
 
 static double CalcTime()
@@ -109,7 +86,7 @@ static double CalcTime()
 	return t;
 }
 
-static double CalcTimeDelta()
+static double CalcTimeDelta(int Ma)
 {
 	double dt = 0;
 
@@ -131,14 +108,14 @@ static void SaveConfig(int ia)
 	}
 }
 
-static void LoadConfig(int M)
+static void LoadConfig(int Ma)
 {
 	ClearLattice();
 
 	for(int ip = 0; ip < Np; ip ++)
 	{
-		rx[ip] = hx(ip, Na - M - 1);
-		ry[ip] = hy(ip, Na - M - 1);
+		rx[ip] = hx(ip, Na - Ma - 1);
+		ry[ip] = hy(ip, Na - Ma - 1);
 
 		ng(rx[ip], ry[ip]) = 1;
 		mg(rx[ip], ry[ip]) = ip + 1;

@@ -1,21 +1,22 @@
 #include "common.h"
-#include "init.h"
-#include "ctmc.h"
 #include "debug.h"
+#include "init.h"
+#include "calc.h"
+#include "ctmc.h"
+#include "tps.h"
 
 int *rx, *ry;
 int *dx, *dy;
 int *hisx, *hisy;
 int *ngrd, **npnt;
 int *mgrd, **mpnt;
-int *nb;
-int Na, Ns;
+int Na;
 double *ht;
-
 uint32_t seed;
 
 static void SaveConfig(int ia);
-static void PrintBond(double t, FILE *hist);
+static void PrintBond(double t, int *nb, FILE *hist);
+static double QuenchBias(int is, int Ns, double X);
 
 int main(int argc, char *argv[])
 {
@@ -24,7 +25,7 @@ int main(int argc, char *argv[])
 	double B = 1/T;
 
 	Na = atoi(argv[3]);
-	Ns = atoi(argv[4]);
+	int Ns = atoi(argv[4]);
 
 	seed = time(NULL);
 	srand(time(NULL));
@@ -46,13 +47,16 @@ int main(int argc, char *argv[])
 		SaveConfig(ia);
 	}
 
+	int nb[Nb];
+
 	FILE *hist;
 	hist = fopen("hist.dat", "w");
 
 	for(int is = 0; is < Ns; is ++)
 	{
-		double t = ShootingTPS(B, X);
-		PrintBond(t, hist);
+		double t = ShootingTPS(B, QuenchBias(is, Ns, X));
+		CalcBond(nb);
+		PrintBond(t, nb, hist);
 	}
 
 	fclose(hist);
@@ -73,7 +77,7 @@ static void SaveConfig(int ia)
 	}
 }
 
-static void PrintBond(double t, FILE *hist)
+static void PrintBond(double t, int *nb, FILE *hist)
 {
 	fprintf(hist, "%8.8f\t", t / Na);
 	double sum = 0.0;
@@ -85,4 +89,17 @@ static void PrintBond(double t, FILE *hist)
 	}
 
 	fprintf(hist, "%0.8f\n", sum);
+}
+
+static double QuenchBias(int is, int Ns, double X)
+{
+	if(is < (Ns / 10))
+	{
+		return 10 * X * is / Ns;
+	}
+
+	else
+	{
+		return X;
+	}
 }

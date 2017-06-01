@@ -13,8 +13,6 @@ void AllocGlobal()
 	dx = (int *) malloc(sizeof(int) * Nd);
 	dy = (int *) malloc(sizeof(int) * Nd);
 
-	nb = (int *) malloc(sizeof(int) * Nd);
-
 	ngrd = (int *) malloc(sizeof(int) * Ng);
 	mgrd = (int *) malloc(sizeof(int) * Ng);
 

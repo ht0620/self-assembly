@@ -12,7 +12,7 @@ int CalcNeighbor(int id, int ip)
 	return ib;
 }
 
-void CalcBond()
+void CalcBond(int *nb)
 {
 	for(int ib = 0; ib < Nb; ib ++)
 	{
