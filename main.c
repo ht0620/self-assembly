@@ -18,10 +18,10 @@ double beta, bias;
 
 uint32_t seed;
 
-static inline void InitialTraj();
-static inline void Xensemble();
-static inline void FixedK();
-static inline void FixedT();
+static void InitialTraj();
+static void Xensemble();
+static void FixedKobs();
+static void FixedTobs();
 
 static void SaveConfig(int ia);
 static double QuenchBias(int is, int Ns);
@@ -36,6 +36,24 @@ int main(int argc, char *argv[])
 
 	if(!strcmp(argv[1],"tps"))
 	{
+		if(argc < 6)
+		{
+			printf("\n  C R I T I C A L  E R R O R\n");
+			printf("\n  Too few arguments :(\n");
+			printf("\n  Arguments: tps $(temperature) $(bias) $(K_obs) $(N_traj)\n\n");
+
+			return 0;
+		}
+
+		if(argc > 6)
+		{
+			printf("\n  C R I T I C A L  E R R O R\n");
+			printf("\n  Too many arguments :(\n");
+			printf("\n  Arguments: tps $(temperature) $(bias) $(K_obs) $(N_traj)\n\n");
+
+			return 0;
+		}
+
 		beta = 1 / atof(argv[2]);
 		bias = atof(argv[3]);
 
@@ -51,6 +69,8 @@ int main(int argc, char *argv[])
 		InitialTraj();
 		Xensemble();
 
+		PrintTrajectory();
+
 		free(hisx);
 		free(hisy);
 		free(ht);
@@ -58,6 +78,24 @@ int main(int argc, char *argv[])
 
 	else if(!strcmp(argv[1],"fxk"))
 	{
+		if(argc < 5)
+		{
+			printf("\n  C R I T I C A L  E R R O R\n");
+			printf("\n  Too few arguments :(\n");
+			printf("\n  Arguments: fxk $(temperature) $(K_obs) $(N_traj)\n\n");
+
+			return 0;
+		}
+
+		if(argc > 5)
+		{
+			printf("\n  C R I T I C A L  E R R O R\n");
+			printf("\n  Too many arguments :(\n");
+			printf("\n  Arguments: fxk $(temperature) $(K_obs) $(N_traj)\n\n");
+
+			return 0;
+		}
+
 		beta = 1 / atof(argv[2]);
 
 		Na = atoi(argv[3]);
@@ -65,12 +103,30 @@ int main(int argc, char *argv[])
 
 		GlobalVarCTMC(beta);
 
-		FixedK();
+		FixedKobs();
 	}
 
 
 	else if(!strcmp(argv[1],"fxt"))
 	{
+		if(argc < 5)
+		{
+			printf("\n  C R I T I C A L  E R R O R\n");
+			printf("\n  Too few arguments :(\n");
+			printf("\n  Arguments: fxt $(temperature) $(t_obs) $(N_traj)\n\n");
+
+			return 0;
+		}
+
+		if(argc > 5)
+		{
+			printf("\n  C R I T I C A L  E R R O R\n");
+			printf("\n  Too many arguments :(\n");
+			printf("\n  Arguments: fxt $(temperature) $(t_obs) $(N_traj)\n\n");
+
+			return 0;
+		}
+
 		beta = 1 / atof(argv[2]);
 
 		T = atof(argv[3]);
@@ -78,14 +134,14 @@ int main(int argc, char *argv[])
 
 		GlobalVarCTMC(beta);
 
-		FixedT();
+		FixedTobs();
 	}
 
 	else
 	{
-		printf("#################################################################\n");
-		printf("## ERROR! Wrong simulation type of the type has not specified. ##\n");
-		printf("#################################################################\n");
+		printf("\n  C R I T I C A L  E R R O R\n");
+		printf("\n  Wrong simulation type or the type has not specified :p\n");
+		printf("\n  Simulation type: fxt fxk tps\n\n");
 	}
 
 	free(rx);	free(ry);
@@ -96,7 +152,7 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-static inline void InitialTraj()
+static void InitialTraj()
 {
 	ClearLattice();
 	RandomConfig();
@@ -111,7 +167,7 @@ static inline void InitialTraj()
 	}
 }
 
-static inline void Xensemble()
+static void Xensemble()
 {
 	int nb[Nb];
 
@@ -128,7 +184,7 @@ static inline void Xensemble()
 	fclose(hist);
 }
 
-static inline void FixedK()
+static void FixedKobs()
 {
 	double aobs = 0;
 	double acum = 0;
@@ -171,7 +227,7 @@ static inline void FixedK()
 	printf("\n");
 }
 
-static inline void FixedT()
+static void FixedTobs()
 {
 	double aobs = 0;
 	double acum = 0;
