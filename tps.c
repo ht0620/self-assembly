@@ -17,7 +17,7 @@ static double CalcTimeDelta(int Ma);
 static int *tmpx, *tmpy;
 static double *tt;
 
-double ShootingTPS(double B, double X)
+double ShootingTPS(double X)
 {
 	int Ma = XorInteger() % (Na - 1) + 1;
 
@@ -27,19 +27,17 @@ double ShootingTPS(double B, double X)
 
  	LoadConfig(Ma);
 
-	tt[0] = InitialCTMC(B);
+	tt[0] = InitialCTMC();
 	SaveConfig(0);
 
 	for(int ia = 1; ia < Ma; ia ++)
 	{
-		tt[ia] = UpdateCTMC(B);
+		tt[ia] = UpdateCTMC();
 		SaveConfig(ia);
 	}
 
-	double dt = CalcTimeDelta(Ma);
-
 	double r = XorDouble();
-	double p = exp(-X * dt);
+	double p = exp(-X * CalcTimeDelta(Ma));
 
 	if(r < p)
 	{
@@ -55,9 +53,7 @@ double ShootingTPS(double B, double X)
 	free(tmpy);
 	free(tt);
 
-	double t = CalcTime();
-
-	return t;
+	return CalcTime();
 }
 
 static void AcceptTraj(int Ma)

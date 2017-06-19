@@ -67,7 +67,7 @@ void DebugGrid()
 
 			n += ng(il, jl);
 		}
-/*
+
 		printf("\t");
 
 		for(il = 0; il < Nl; il ++)
@@ -80,7 +80,7 @@ void DebugGrid()
 
 			m += mg(il, jl);
 		}
-*/
+
 		printf("\n");
 	}
 

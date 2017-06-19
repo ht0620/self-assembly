@@ -7,9 +7,6 @@ void AllocGlobal()
 	rx = (int *) malloc(sizeof(int) * Np);
 	ry = (int *) malloc(sizeof(int) * Np);
 
-	hisx = (int *) malloc(sizeof(int) * Np * Na);
-	hisy = (int *) malloc(sizeof(int) * Np * Na);
-
 	dx = (int *) malloc(sizeof(int) * Nd);
 	dy = (int *) malloc(sizeof(int) * Nd);
 
@@ -18,8 +15,6 @@ void AllocGlobal()
 
 	npnt = (int **) malloc(sizeof(int *) * Nv);
 	mpnt = (int **) malloc(sizeof(int *) * Nv);
-
-	ht = (double *) malloc(sizeof(double) * Na);
 
 	// point array
 	dx[0] = 0;	dx[1] = 1;	dx[2] =-1;	dx[3] = 0;	dx[4] = 0;
