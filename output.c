@@ -17,11 +17,21 @@ void PrintBond(double t, int *nb, FILE *hist)
 void PrintTrajectory()
 {
 	FILE *traj;
+	FILE *thst;
+
 	traj = fopen("traj.dat", "w");
+	thst = fopen("thst.dat", "w");
+
+	double htcum = 0;
+	double atcum = 0;
 
 	for(int ia = 0; ia < Na; ia ++)
 	{
-		fprintf(traj, "%.8f\n", ht[ia]);
+		htcum += ht[ia];
+		atcum += at[ia];
+
+		fprintf(traj, "%d\t%.8f\t%.8f\n", ia, ht[ia], htcum);
+		fprintf(thst, "%d\t%.8f\t%.8f\n", ia, at[ia], atcum);
 
 		for(int ip = 0; ip < Np; ip ++)
 		{
@@ -30,4 +40,5 @@ void PrintTrajectory()
 	}
 
 	fclose(traj);
+	fclose(thst);
 }

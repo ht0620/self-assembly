@@ -36,7 +36,7 @@ extern int *rx, *ry;
 extern int *dx, *dy;
 
 extern int *hisx, *hisy;
-extern double *ht;
+extern double *ht, *at;
 
 extern int *ngrd, **npnt;
 extern int *mgrd, **mpnt;

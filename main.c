@@ -13,7 +13,7 @@ int *ngrd, **npnt;
 int *mgrd, **mpnt;
 int Na, Ns;
 
-double *ht, T;
+double *ht, *at, T;
 double beta, bias;
 
 uint32_t seed;
@@ -62,7 +62,9 @@ int main(int argc, char *argv[])
 
 		hisx = (int *) malloc(sizeof(int) * Np * Na);
 		hisy = (int *) malloc(sizeof(int) * Np * Na);
+
 		ht = (double *) malloc(sizeof(double) * Na);
+		at = (double *) malloc(sizeof(double) * Na);
 
 		GlobalVarCTMC(beta);
 
@@ -74,6 +76,7 @@ int main(int argc, char *argv[])
 		free(hisx);
 		free(hisy);
 		free(ht);
+		free(at);
 	}
 
 	else if(!strcmp(argv[1],"fxk"))
@@ -163,6 +166,7 @@ static void InitialTraj()
 	for(int ia = 1; ia < Na; ia ++)
 	{
 		ht[ia] = UpdateCTMC();
+		at[ia] = ht[ia] / Ns;
 		SaveConfig(ia);
 	}
 }
@@ -179,6 +183,11 @@ static void Xensemble()
 		double t = ShootingTPS(QuenchBias(is, Ns));
 		CalcBond(nb);
 		PrintBond(t, nb, hist);
+
+		for(int ia = 0; ia < Na; ia ++)
+		{
+			at[ia] += ht[ia] / Ns;
+		}
 	}
 
 	fclose(hist);
