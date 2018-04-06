@@ -176,7 +176,7 @@ static void Xensemble()
 	int nb[Nb];
 
 	FILE *hist;
-	hist = fopen("hist.dat", "w");
+	hist = fopen("hist.csv", "w");
 
 	for(int is = 0; is < Ns; is ++)
 	{
@@ -226,11 +226,11 @@ static void FixedKobs()
 		}
 	}
 
-	printf("%.8f\t%d\t%.8f\t%.8f", 1/beta, Na, aobs, acum);
+	printf("%.8f,%d,%.8f,%.8f", 1/beta, Na, aobs, acum);
 
 	for(int ib = 0; ib < Nb; ib ++)
 	{
-		printf("\t%.8f", ab[ib]);
+		printf(",%.8f", ab[ib]);
 	}
 
 	printf("\n");
@@ -273,11 +273,11 @@ static void FixedTobs()
 		}
 	}
 
-	printf("%.8f\t%.8f\t%.8f\t%.8f", 1/beta, T, aobs, acum);
+	printf("%.8f,%.8f,%.8f,%.8f", 1/beta, T, aobs, acum);
 
 	for(int ib = 0; ib < Nb; ib ++)
 	{
-		printf("\t%.8f", ab[ib]);
+		printf(",%.8f", ab[ib]);
 	}
 
 	printf("\n");
