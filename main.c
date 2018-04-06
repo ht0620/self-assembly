@@ -68,10 +68,14 @@ int main(int argc, char *argv[])
 
 		GlobalVarCTMC(beta);
 
-		InitialTraj();
-		Xensemble();
+		for(int i = 0; i < 100; i ++)
+		{
+			InitialTraj();
+			Xensemble();
+		}
 
 		PrintTrajectory();
+
 
 		free(hisx);
 		free(hisy);
@@ -176,13 +180,15 @@ static void Xensemble()
 	int nb[Nb];
 
 	FILE *hist;
-	hist = fopen("hist.csv", "w");
+	hist = fopen("hist.csv", "a");
 
 	for(int is = 0; is < Ns; is ++)
 	{
 		double t = ShootingTPS(QuenchBias(is, Ns));
 		CalcBond(nb);
-		PrintBond(t, nb, hist);
+
+		if(is >= (Ns/2))
+			PrintBond(t, nb, hist);
 
 		for(int ia = 0; ia < Na; ia ++)
 		{
