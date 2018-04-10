@@ -187,7 +187,7 @@ static void Xensemble()
 		double t = ShootingTPS(QuenchBias(is, Ns));
 		CalcBond(nb);
 
-		if(is >= (Ns/2))
+		if(is >= (Ns * 0.9))
 			PrintBond(t, nb, hist);
 
 		for(int ia = 0; ia < Na; ia ++)
