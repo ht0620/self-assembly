@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 
 		GlobalVarCTMC(beta);
 
-		for(int i = 0; i < 100; i ++)
+		for(int i = 0; i < 10; i ++)
 		{
 			InitialTraj();
 			Xensemble();
@@ -187,7 +187,7 @@ static void Xensemble()
 		double t = ShootingTPS(QuenchBias(is, Ns));
 		CalcBond(nb);
 
-		if(is >= (Ns * 0.9))
+		if(is >= (Ns - 10))
 			PrintBond(t, nb, hist);
 
 		for(int ia = 0; ia < Na; ia ++)
